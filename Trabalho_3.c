@@ -1,40 +1,50 @@
+/*Versao que usa arquivos, e foi alterado a forma de calcular
+fonte: http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-2d-triangle
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
 int calc_area(int x1, int y1, int x2, int y2, int x3, int y3){
-	int calc = 0;
+    int calc = 0;
 
-	calc = ((x1-x3)*(y2-y3)-(x2-x3)*(y1-y3));
-	return calc;
+    calc = ((x1-x3)*(y2-y3)-(x2-x3)*(y1-y3));
+    return calc;
 }
 
 int main(){
-	int x1, x2, x3, y1, y2, y3; //coordenadas do triangulo
-	int px,py; //coordenadas do ponto
-	int result_a, result_b, result_c, result_d;
+    int x1, x2, x3, y1, y2, y3; //coordenadas do triangulo
+    int px, py; //coordenadas do ponto
+    int result_a, result_b, result_c, i=0;
+    int count = 0;
 
-	
-	printf("Coordenadas do triangulo:\n");
-	printf("X1 e Y1: ");
-	scanf("%d %d",&x1,&y1);
-	printf("X2 e Y2: ");
-	scanf("%d %d",&x2,&y2);
-	printf("X3 e Y3: ");
-	scanf("%d %d",&x3,&y3);
-	printf("Coordenadas do ponto: \n");
-	scanf("%d %d",&px,&py);
+    FILE *coordenadas; //coordenadas dos pontos e do triangulo
+    FILE *result; //resultado
 
- 	result_a = calc_area(x1, y1, x2, y2, x3, y3);
-	result_b = calc_area(x1, y1, x3, y3, px, py);
-	result_c = calc_area(x1, y1, x2, y2, px, py);
-	result_d = calc_area(x3, y3, px, py, x1, y1);
+    coordenadas = fopen("coordenadas.txt","r");
+    result = fopen("resultado_C.txt","w");
+    if(coordenadas == NULL){
+       printf("Nao foi possivel abrir o arquivo\n");
+       exit(1);
+    }
+    for(i=0; i<1000;i++){
+    	fscanf(coordenadas,"%d %d %d %d %d %d %d %d\n",
+    	&px, &py, &x1, &y1, &x2, &y2, &x3, &y3); //ler as coordenadas
 
-	if(result_a == (result_b+result_c+result_d)){
-		printf("Esta dentro do triangulo\n");
-	}
-	else{
-		printf("Nao esta dentro do triangulo\n\n");
-	}
+	result_a = calc_area(px, py, x1, y1, x2, y2);
+	result_b = calc_area(px, py, x2, y2, x3, y3);
+	result_c = calc_area(px, py, x3, y3, x1, y1);
 
-	return 0;
+	if((result_a == result_b) && (result_a == result_c)){
+	    fprintf(result,("1\n"));//1 se esta dentro do triangulo;
+            count ++;
+        }
+        else{
+            fprintf(result,("0\n"));//0 se não está
+        }		
+    }
+    printf("\n%d ",count);//quant. de resultados positivos
+    fclose(coordenadas);
+    fclose(result);
+
+    return 0;
 }
