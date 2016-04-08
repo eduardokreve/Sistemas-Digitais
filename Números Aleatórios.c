@@ -16,10 +16,10 @@ int main(){
 	    quant_pontos[j] = rand()%5;
 	    fprintf(coordenadas,("%d "), quant_pontos[j]);
 	}
-	for(j = 0; j < 6; j++){
+	for(j = 0; j < 5; j++){
 	    quant_tri[j] = rand()%5;
 	    fprintf(coordenadas,("%d "), quant_tri[j]);
-	    if(j == 5){
+	    if(j == 4){
 	        fprintf(coordenadas,("%d \n"),quant_tri[j]);
 		break;
 	    }
